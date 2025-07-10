@@ -9,64 +9,116 @@ A mobile-first PWA that generates QR codes for LinkedIn profiles, allowing users
 ## Tech Stack
 
 - **Frontend**: TypeScript + React Router (framework mode)
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS + Inter font
 - **QR Generation**: qrcode.js
-- **Data Persistence**: localStorage/cookies (v0), PostgreSQL (v1)
+- **Data Persistence**: cookies (v0), PostgreSQL (v1)
 - **Testing**: Vitest + React Testing Library
 - **Linting**: Biome
 - **Database (v1)**: PostgreSQL + Kysely
 - **Authentication (v1)**: LinkedIn OAuth 2.0
 - **Deployment**: Digital Ocean App Platform
 
+## Design System
+
+### Color Palette
+- **Primary**: `bg-blue-600` (#2563eb) - Main actions, LinkedIn-inspired
+- **Secondary**: `bg-slate-100` (#f1f5f9) - Card backgrounds
+- **Accent**: `bg-emerald-500` (#10b981) - Success states
+- **Warning**: `bg-amber-500` (#f59e0b) - URL warnings  
+- **Error**: `bg-red-500` (#ef4444) - Validation errors
+- **Text**: `text-slate-900` / `text-slate-600` / `text-slate-400`
+- **Borders**: `border-slate-200` / `border-slate-300`
+
+### Typography
+- **Font Family**: `font-inter` (Inter via CDN fallback to `font-sans`)
+- **Headings**: `text-2xl font-semibold` for card title
+- **Body**: `text-base font-normal` for main text
+- **CTA**: `text-sm font-medium` for button text
+- **Small**: `text-xs font-normal` for helper text
+
+### Spacing System (Tailwind Scale)
+- **Micro**: `space-y-2` (8px) - Between related elements
+- **Small**: `space-y-4` (16px) - Between component sections  
+- **Medium**: `space-y-6` (24px) - Between major sections
+- **Large**: `space-y-8` (32px) - Card padding
+- **Extra Large**: `space-y-12` (48px) - Page margins
+
+### Interactive States
+- **Buttons**:
+  - Default: `bg-blue-600 text-white`
+  - Hover: `hover:bg-blue-700 transform hover:scale-[1.02]`
+  - Focus: `focus:ring-4 focus:ring-blue-200 focus:outline-none`
+  - Active: `active:scale-[0.98]`
+  - Disabled: `disabled:bg-slate-300 disabled:cursor-not-allowed`
+  
+- **Input Fields**:
+  - Default: `border-slate-300 focus:border-blue-500`
+  - Focus: `focus:ring-2 focus:ring-blue-200`
+  - Error: `border-red-500 focus:border-red-500 focus:ring-red-200`
+  - Success: `border-emerald-500 focus:border-emerald-500`
+
+### Layout & Responsive
+- **Container**: `max-w-md mx-auto` (448px max width, centered)
+- **Safe Areas**: `px-4 pt-safe pb-safe` using `@tailwindcss/safe-area` plugin
+- **Breakpoints**: Tailwind defaults (sm: 640px, md: 768px, lg: 1024px)
+- **Desktop**: Same centered card design, just more breathing room
+
+### Animations
+- **Timing**: `duration-200` (200ms) for micro-interactions, `duration-300` (300ms) for transitions
+- **Easing**: `ease-out` for entrances, `ease-in-out` for state changes
+- **Card Entrance**: `animate-in fade-in-0 slide-in-from-bottom-4 duration-300`
+- **QR Generation**: `animate-pulse` briefly when QR appears
+- **Button Interactions**: `transition-all duration-200 ease-out`
+
 ## Version 0: Manual URL Entry
 
 ### Features
 - Manual LinkedIn profile URL/handle input (individual profiles only)
-- Professional, playful mobile UI optimized for networking events
+- Modern, clean mobile UI following Resend/Lovable design aesthetic
 - Simple QR code generation (black/white, no customization)
 - Profile URL persistence (cookies)
-- PWA installability
 - URL editing capability
-- Test scan feature to verify QR code works
 - URL validation with warnings for questionable URLs
 - Accessibility compliance (WCAG 2.1 AA)
 - Connection status awareness
+- Portrait-only orientation
 
 ### User Flow
-1. User opens app (with onboarding tooltip for first-time users)
-2. Enters LinkedIn profile URL or handle
-3. App validates URL and shows warnings if questionable
-4. User confirms or fixes URL
-5. App stores valid URL in cookie
-6. Displays professional card with QR code
-7. User can test QR code functionality
-8. Others scan QR → redirected to LinkedIn profile
+1. User opens app
+2. **New User**: Sees empty card with "Add your LinkedIn profile" CTA
+3. **Returning User**: If cookie exists, immediately shows card with QR code
+4. Enters LinkedIn profile URL or handle
+5. App validates URL and shows warnings if questionable
+6. User confirms or fixes URL
+7. App stores valid URL in cookie
+8. Displays professional card with QR code and "Point camera here to connect on LinkedIn" CTA
+9. Others scan QR → redirected to LinkedIn profile
 
-### First-Time User Onboarding
-1. Brief tooltip explaining the app purpose
-2. Example of valid LinkedIn URL format
-3. Instructions for QR code usage at networking events
+### Return User Experience
+1. App loads → Check cookie for saved LinkedIn URL
+2. If URL exists → Immediately display card with QR code
+3. If no URL → Show empty state with URL input CTA
+
+### Error Recovery
+- **QR Generation Fails**: Clear input field, show error message: "Please try entering your URL again"
+- **Invalid URL**: Show inline validation error, keep input focused
+- **Network Issues**: Show connection status, allow retry
 
 ### Core Components
 ```
 app/
 ├── ui/
 │   ├── ProfileCard.tsx       # Main card display
-│   ├── QRCode.tsx           # QR code generation with test scan
+│   ├── QRCode.tsx           # QR code generation and display
 │   ├── URLInput.tsx         # Profile URL input form with validation
 │   ├── URLWarning.tsx       # Warning banner for questionable URLs
 │   ├── EditButton.tsx       # Edit profile URL
-│   ├── TestScanButton.tsx   # Test QR code functionality
-│   ├── InstallPrompt.tsx    # PWA install prompt
-│   ├── OnboardingTooltip.tsx # First-time user guidance
 │   ├── ConnectionStatus.tsx # Network connectivity indicator
 │   └── ErrorBoundary.tsx    # Error handling wrapper
 ├── business/
 │   ├── hooks/
 │   │   ├── useProfileURL.ts     # Cookie management
 │   │   ├── useQRCode.ts         # QR code generation
-│   │   ├── usePWA.ts           # PWA install detection
-│   │   ├── useOnboarding.ts     # First-time user state
 │   │   └── useConnection.ts     # Network status monitoring
 │   ├── services/
 │   │   ├── linkedin.ts          # URL validation/normalization
@@ -79,22 +131,30 @@ app/
 └── routes/
     ├── _index.tsx              # Home page
     ├── edit.tsx                # Edit profile URL page
-    ├── test-scan.tsx           # Test QR scan functionality
     └── root.tsx                # Root layout with error boundary
 ```
 
-### Design Elements (Playful + Professional)
-- **Color Scheme**: LinkedIn blue (#0077B5) + modern gradients
-- **Animations**: 
-  - Gentle card entrance animation
-  - QR code "pulse" when generated
-  - Smooth micro-interactions on buttons
-  - Floating particles background (subtle)
-- **Typography**: Clean sans-serif with proper hierarchy
-- **Interactive Elements**:
-  - Button hover states with gentle transforms
-  - Card tilt on device motion (subtle parallax)
-  - Loading states with skeleton screens
+### Card Design (Resend/Lovable Style)
+- **Container**: `bg-white rounded-2xl shadow-lg border border-slate-200`
+- **Aspect Ratio**: `aspect-[3/4]` (business card-like proportions)
+- **Padding**: `p-8` (32px) for generous whitespace
+- **Structure**:
+  ```
+  ┌─────────────────────┐
+  │  [Future: Avatar]   │ 
+  │  [Future: Name]     │
+  │                     │
+  │    ████████████     │ ← QR Code (centered)
+  │    ████████████     │
+  │    ████████████     │
+  │                     │
+  │ "Scan to connect"   │ ← CTA (bottom)
+  └─────────────────────┘
+  ```
+
+### Content States
+- **No URL**: Large CTA button "Add your LinkedIn profile"
+- **URL Added**: QR code + bottom text "Point camera here to connect on LinkedIn"
 
 ## Version 1: LinkedIn OAuth Integration
 
@@ -287,17 +347,11 @@ type ValidationResult = {
 - **Quiet Zone**: 4 modules border for reliable scanning
 - **Content**: Direct LinkedIn profile URL (no shorteners)
 
-### Test Scan Feature
-- Button to open device camera for QR testing
-- Immediate feedback if QR scan succeeds/fails
-- Instructions: "Point your camera at the QR code to test"
-- Success message: "✓ QR code works! Others can scan this."
-- Failure guidance: "Try adjusting lighting or distance"
 
-## PWA Configuration
+## PWA Configuration (v0.5)
 - Manifest with proper icons and theme colors
 - Service worker for offline capability
-- Install prompt for better mobile experience
+- Install prompt for better mobile experience (moved to v0.5)
 - Proper viewport and mobile optimization
 - Offline indicator when QR generation unavailable
 
@@ -326,11 +380,10 @@ type ValidationResult = {
 **Test Scenarios**:
 1. **URL Input**: Valid URLs, invalid URLs, edge cases
 2. **QR Generation**: Various URL lengths, special characters
-3. **Test Scan**: QR code readability in different lighting
-4. **Cookie Persistence**: Browser refresh, app reinstall
-5. **Accessibility**: Screen reader, keyboard navigation, high contrast
-6. **Network States**: Online, offline, slow connection
-7. **PWA Install**: Install prompt, offline usage
+3. **Cookie Persistence**: Browser refresh, app reinstall
+4. **Accessibility**: Screen reader, keyboard navigation, high contrast
+5. **Network States**: Online, offline, slow connection
+6. **Return User Flow**: Saved URL persistence and immediate QR display
 
 ### Accessibility Testing Checklist
 - Screen reader compatibility (VoiceOver, TalkBack)
@@ -351,7 +404,6 @@ type ValidationResult = {
 ### Browser Support Issues
 - **Cookies Disabled**: Warning message with instructions to enable
 - **LocalStorage Full**: Fallback to session storage, then memory only
-- **Camera Access Denied**: Disable test scan feature gracefully
 
 ### QR Code Generation Failures
 - **Invalid URL**: Clear error message with format examples
@@ -377,9 +429,7 @@ linkedin-card/
 │   ├── business/
 │   │   ├── hooks/
 │   │   │   ├── use-profile-url.ts
-│   │   │   ├── use-pwa.ts
 │   │   │   ├── use-qr-code.ts
-│   │   │   ├── use-onboarding.ts
 │   │   │   └── use-connection.ts
 │   │   ├── services/
 │   │   │   ├── cookies.ts
@@ -392,7 +442,6 @@ linkedin-card/
 │   ├── routes/
 │   │   ├── _index.tsx
 │   │   ├── edit.tsx
-│   │   ├── test-scan.tsx
 │   │   └── root.tsx
 │   ├── styles/
 │   │   └── globals.css
@@ -401,11 +450,8 @@ linkedin-card/
 │   │   │   ├── connection-status.tsx
 │   │   │   ├── edit-button.tsx
 │   │   │   ├── error-boundary.tsx
-│   │   │   ├── install-prompt.tsx
-│   │   │   ├── onboarding-tooltip.tsx
 │   │   │   ├── profile-card.tsx
 │   │   │   ├── qr-code.tsx
-│   │   │   ├── test-scan-button.tsx
 │   │   │   ├── url-input.tsx
 │   │   │   └── url-warning.tsx
 │   │   └── primitives/
@@ -451,11 +497,10 @@ linkedin-card/
 5. Connection status monitoring
 
 ### Phase 3: User Experience
-1. Onboarding tooltip for first-time users
-2. Test scan feature with camera access
-3. PWA install prompt
-4. Accessibility improvements
-5. Error handling polish
+1. Return user flow with cookie persistence
+2. Accessibility improvements
+3. Error handling polish
+4. Connection status monitoring
 
 ### Phase 4: Testing & Polish
 1. Unit tests for validation and utilities
