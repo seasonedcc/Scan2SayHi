@@ -11,20 +11,20 @@ import type { Route } from './+types/qr'
 
 export function meta(_: Route.MetaArgs) {
   return [
-    { title: 'LinkedIn QR Code - Share Your Profile' },
+    { title: 'Scan2SayHi - Your LinkedIn QR Code' },
     {
       name: 'description',
       content:
-        'Your LinkedIn QR code is ready! Download, share, or customize your QR code.',
+        'Your LinkedIn QR code is ready! Download, share, or customize your QR code with Scan2SayHi.',
     },
     {
       name: 'keywords',
-      content: 'LinkedIn, QR code, share, download, customize',
+      content: 'Scan2SayHi, LinkedIn, QR code, share, download, customize',
     },
-    { property: 'og:title', content: 'LinkedIn QR Code Ready' },
+    { property: 'og:title', content: 'Scan2SayHi - LinkedIn QR Code Ready' },
     {
       property: 'og:description',
-      content: 'Your LinkedIn QR code is ready to share',
+      content: 'Your LinkedIn QR code is ready to share with Scan2SayHi',
     },
     { property: 'og:type', content: 'website' },
   ]
@@ -77,6 +77,46 @@ export async function action({ request }: Route.ActionArgs) {
   if (action === 'retry_qr') {
     // Just reload the page to retry QR generation
     return redirect('/qr')
+  }
+
+  if (action === 'update_config') {
+    const size = Number(formData.get('size')) || 256
+    const errorCorrectionLevel = (formData.get('errorCorrectionLevel') as 'L' | 'M' | 'Q' | 'H') || 'M'
+    const darkColor = formData.get('darkColorText') as string || formData.get('darkColor') as string || '#000000'
+    const lightColor = formData.get('lightColorText') as string || formData.get('lightColor') as string || '#FFFFFF'
+
+    // Get current user data from cookies
+    const cookieValidation = handleCookieValidation(request)
+    if (!cookieValidation.userData?.linkedinUrl) {
+      return redirect('/')
+    }
+
+    // Import cookie manager functions
+    const { updateQrConfigAndGetHeaders } = await import('../business/cookies/cookies.server')
+
+    const result = await updateQrConfigAndGetHeaders(request, {
+      size,
+      errorCorrectionLevel,
+      colors: {
+        dark: darkColor,
+        light: lightColor,
+      },
+    })
+
+    if (!result.success) {
+      return data(
+        {
+          success: false,
+          error: result.errors[0] || 'Failed to update QR config',
+          errors: result.errors,
+          warnings: result.warnings,
+        },
+        { status: 400 }
+      )
+    }
+
+    // Redirect to reload the page with new QR code
+    return redirect('/qr', result.headers ? { headers: result.headers } : undefined)
   }
 
   if (action === 'update_url') {
@@ -221,7 +261,7 @@ export default function QrPage({ loaderData }: Route.ComponentProps) {
           qrCode={qrCode}
           qrError={qrError}
           showDownloadButton={true}
-          showConfigPanel={false}
+          showConfigPanel={true}
         />
 
         {/* Compact Update Form */}

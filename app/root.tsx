@@ -38,25 +38,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Generate professional QR codes for your LinkedIn profile. Perfect for business cards, networking events, and digital sharing."
+          content="Generate professional QR codes for your LinkedIn profile with Scan2SayHi. Perfect for business cards, networking events, and digital sharing."
         />
         <meta
           name="keywords"
-          content="LinkedIn, QR code, business card, networking, professional, generator"
+          content="Scan2SayHi, LinkedIn, QR code, business card, networking, professional, generator"
         />
-        <meta name="author" content="LinkedIn QR Card" />
+        <meta name="author" content="Scan2SayHi" />
 
         {/* PWA Meta Tags */}
-        <meta name="application-name" content="LinkedIn QR Card" />
+        <meta name="application-name" content="Scan2SayHi" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="LinkedIn QR Card" />
+        <meta name="apple-mobile-web-app-title" content="Scan2SayHi" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#2563eb" />
+        <meta name="theme-color" content="#7c3aed" />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="LinkedIn QR Card" />
+        <meta property="og:site_name" content="Scan2SayHi" />
         <meta property="og:locale" content="en_US" />
 
         <Meta />

@@ -10,21 +10,21 @@ import type { Route } from './+types/home'
 
 export function meta(_: Route.MetaArgs) {
   return [
-    { title: 'LinkedIn QR Card Generator - Create Professional QR Codes' },
+    { title: 'Scan2SayHi - Create Professional LinkedIn QR Codes' },
     {
       name: 'description',
       content:
-        'Generate professional QR codes for your LinkedIn profile. Perfect for business cards, networking events, and digital sharing. Secure, fast, and works offline.',
+        'Generate professional QR codes for your LinkedIn profile with Scan2SayHi. Perfect for business cards, networking events, and digital sharing. Secure, fast, and works offline.',
     },
     {
       name: 'keywords',
       content:
-        'LinkedIn, QR code, business card, networking, professional, generator',
+        'Scan2SayHi, LinkedIn, QR code, business card, networking, professional, generator',
     },
-    { property: 'og:title', content: 'LinkedIn QR Card Generator' },
+    { property: 'og:title', content: 'Scan2SayHi - LinkedIn QR Generator' },
     {
       property: 'og:description',
-      content: 'Create professional QR codes for your LinkedIn profile',
+      content: 'Create professional QR codes for your LinkedIn profile with Scan2SayHi',
     },
     { property: 'og:type', content: 'website' },
   ]
@@ -142,10 +142,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="space-y-4 text-center">
           <div className="space-y-2">
             <h1 className="font-bold text-3xl text-gray-900 sm:text-4xl dark:text-white">
-              LinkedIn QR Card Generator
+              Create Your LinkedIn QR Code
             </h1>
             <p className="mx-auto max-w-2xl text-gray-600 text-lg dark:text-gray-400">
-              Create professional QR codes for your LinkedIn profile. Perfect
+              Generate professional QR codes for your LinkedIn profile with Scan2SayHi. Perfect
               for business cards, networking events, and digital sharing.
             </p>
           </div>

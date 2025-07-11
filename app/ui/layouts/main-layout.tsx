@@ -12,15 +12,15 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-900">
-                <span className="font-bold text-sm text-white">QR</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
+                <span className="font-bold text-sm text-white">S2</span>
               </div>
               <div>
                 <h1 className="font-semibold text-gray-900 text-lg dark:text-white">
-                  LinkedIn QR Card
+                  Scan2SayHi
                 </h1>
                 <p className="text-gray-500 text-xs dark:text-gray-400">
-                  Generate QR codes for your LinkedIn profile
+                  LinkedIn QR codes made simple
                 </p>
               </div>
             </div>
@@ -45,7 +45,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="space-y-2 text-center">
             <p className="text-gray-600 text-sm dark:text-gray-400">
-              Create professional QR codes for your LinkedIn profile
+              Create professional LinkedIn QR codes with Scan2SayHi
             </p>
             <div className="flex items-center justify-center gap-4 text-gray-500 text-xs dark:text-gray-500">
               <span>Built with React Router v7</span>

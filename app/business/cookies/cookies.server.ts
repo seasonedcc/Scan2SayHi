@@ -590,6 +590,56 @@ export const storeLinkedinUrlAndGetHeaders = async (
   return returnValue
 }
 
+export const updateQrConfigAndGetHeaders = async (
+  request: Request,
+  qrConfig: {
+    size?: number
+    errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H'
+    colors?: { dark: string; light: string }
+  }
+): Promise<{
+  success: boolean
+  headers?: Headers
+  userData?: UserDataCookie
+  errors: string[]
+  warnings: string[]
+}> => {
+  const result = await defaultCookieManager.updateQrConfig(request, qrConfig)
+
+  if (!result.success || !result.cookieHeader) {
+    return {
+      success: false,
+      errors: result.errors,
+      warnings: result.warnings,
+    }
+  }
+
+  const headers = new Headers()
+  headers.set('Set-Cookie', result.cookieHeader)
+
+  const returnValue: {
+    success: boolean
+    headers?: Headers
+    userData?: UserDataCookie
+    errors: string[]
+    warnings: string[]
+  } = {
+    success: true,
+    errors: result.errors,
+    warnings: result.warnings,
+  }
+
+  if (headers) {
+    returnValue.headers = headers
+  }
+
+  if (result.data) {
+    returnValue.userData = result.data
+  }
+
+  return returnValue
+}
+
 /**
  * Session management utilities
  */
