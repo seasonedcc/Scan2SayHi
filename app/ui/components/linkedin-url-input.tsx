@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useState } from 'react'
-import { validateLinkedinUrl } from '../../business/linkedin/linkedin.common'
+import { normalizeLinkedinUrl } from '../../business/linkedin/linkedin.common'
 
 export interface LinkedinUrlInputProps {
   initialValue?: string
@@ -24,26 +24,32 @@ export const LinkedinUrlInput: React.FC<LinkedinUrlInputProps> = ({
     const newUrl = event.target.value
     setUrl(newUrl)
 
-    // Clear previous validation error
+    // Clear previous validation error when typing
     setValidationError(null)
+    setIsValidating(false)
+  }
 
-    // Validate on the fly if URL is not empty
-    if (newUrl.trim()) {
-      setIsValidating(true)
-
-      // Debounce validation
-      const timeoutId = setTimeout(() => {
-        const validation = validateLinkedinUrl(newUrl.trim())
-        if (!validation.success) {
-          setValidationError(
-            validation.error.issues[0]?.message || 'Invalid LinkedIn URL'
-          )
-        }
-        setIsValidating(false)
-      }, 300)
-
-      return () => clearTimeout(timeoutId)
+  const handleBlur = () => {
+    const trimmedUrl = url.trim()
+    if (!trimmedUrl) {
+      setValidationError(null)
+      setIsValidating(false)
+      return
     }
+
+    setIsValidating(true)
+    // Basic validation - accept usernames or LinkedIn URLs
+    const isValidInput =
+      /^[a-zA-Z0-9\-_]+$/.test(trimmedUrl) || // Username format
+      trimmedUrl.includes('linkedin.com/in/') || // LinkedIn URL
+      normalizeLinkedinUrl(trimmedUrl).success // Full validation as fallback
+
+    if (!isValidInput) {
+      setValidationError('Please enter a LinkedIn username or full profile URL')
+    } else {
+      setValidationError(null)
+    }
+    setIsValidating(false)
   }
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -57,12 +63,14 @@ export const LinkedinUrlInput: React.FC<LinkedinUrlInputProps> = ({
       return
     }
 
-    // Final validation before submit
-    const validation = validateLinkedinUrl(trimmedUrl)
-    if (!validation.success) {
-      setValidationError(
-        validation.error.issues[0]?.message || 'Invalid LinkedIn URL'
-      )
+    // Final validation before submit - be permissive, let server handle normalization
+    const isValidInput =
+      /^[a-zA-Z0-9\-_]+$/.test(trimmedUrl) || // Username format
+      trimmedUrl.includes('linkedin.com/in/') || // LinkedIn URL
+      normalizeLinkedinUrl(trimmedUrl).success // Full validation as fallback
+
+    if (!isValidInput) {
+      setValidationError('Please enter a LinkedIn username or full profile URL')
       return
     }
 
@@ -70,7 +78,7 @@ export const LinkedinUrlInput: React.FC<LinkedinUrlInputProps> = ({
     setValidationError(null)
 
     try {
-      await onSubmit(validation.data)
+      await onSubmit(trimmedUrl)
     } catch (error) {
       setValidationError(
         error instanceof Error ? error.message : 'Failed to submit URL'
@@ -96,11 +104,12 @@ export const LinkedinUrlInput: React.FC<LinkedinUrlInputProps> = ({
         <div className="relative">
           <input
             id="linkedin-url"
-            type="url"
+            type="text"
             value={url}
             onChange={handleUrlChange}
+            onBlur={handleBlur}
             disabled={disabled || isSubmitting}
-            placeholder="https://linkedin.com/in/your-username"
+            placeholder="foobar or https://linkedin.com/in/foobar"
             className={`w-full rounded-lg border px-4 py-3 text-sm transition-colors duration-200 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-gray-500 ${
               hasError
                 ? 'border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500 dark:border-red-600 dark:bg-red-900/20 dark:text-red-100'

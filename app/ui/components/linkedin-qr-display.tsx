@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import type { QrConfig } from '../../business/qr/qr.common'
-import { useQrCode } from '../hooks/use-qr-code'
+import type { QrConfig, QrGenerationResult } from '../../business/qr/qr.common'
 import { QrCode } from './qr-code'
+import { Form } from 'react-router'
 
 export interface LinkedinQrDisplayProps {
   linkedinUrl: string
   qrConfig?: Partial<QrConfig> | undefined
+  qrCode?: QrGenerationResult | null | undefined
+  qrError?: string | null | undefined
   showDownloadButton?: boolean
   showConfigPanel?: boolean
   className?: string
@@ -14,31 +16,13 @@ export interface LinkedinQrDisplayProps {
 export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
   linkedinUrl,
   qrConfig = {},
+  qrCode,
+  qrError,
   showDownloadButton = true,
   showConfigPanel = false,
   className = '',
 }) => {
-  const [currentConfig, setCurrentConfig] =
-    useState<Partial<QrConfig>>(qrConfig)
-  const [showConfig, setShowConfig] = useState(false) // Always start closed
 
-  const { qrCode, isLoading, error, retry, generateQrCode } = useQrCode({
-    config: currentConfig,
-  })
-
-  // Generate QR code when URL or config changes
-  React.useEffect(() => {
-    if (linkedinUrl) {
-      generateQrCode(linkedinUrl)
-    }
-  }, [linkedinUrl, currentConfig, generateQrCode])
-
-  const handleConfigChange = (field: keyof QrConfig, value: any) => {
-    setCurrentConfig((prev) => ({
-      ...prev,
-      [field]: value,
-    }))
-  }
 
   const handleDownload = () => {
     if (!qrCode?.dataUrl) return
@@ -88,27 +72,10 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
           </div>
 
           <QrCode
-            content={linkedinUrl}
-            config={currentConfig}
+            qrCode={qrCode}
+            error={qrError}
             className="mx-auto"
           />
-
-          {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
-              <p className="mb-2 text-red-800 text-sm dark:text-red-400">
-                Failed to generate QR code
-              </p>
-              <p className="mb-3 text-red-600 text-xs dark:text-red-500">
-                {error}
-              </p>
-              <button
-                onClick={retry}
-                className="rounded bg-red-100 px-3 py-1 text-red-800 text-sm transition-colors hover:bg-red-200 dark:bg-red-800/30 dark:text-red-400 dark:hover:bg-red-800/50"
-              >
-                Try Again
-              </button>
-            </div>
-          )}
 
           <div className="text-gray-600 text-sm dark:text-gray-400">
             <p className="mb-1 font-medium">LinkedIn Profile</p>
@@ -124,7 +91,7 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
             <>
               <button
                 onClick={handleDownload}
-                disabled={isLoading || !!error}
+                disabled={!!qrError}
                 className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-2.5 font-medium text-sm text-white shadow-lg transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 hover:shadow-xl disabled:cursor-not-allowed disabled:from-gray-400 disabled:to-gray-400 disabled:hover:scale-100"
               >
                 <svg
@@ -146,7 +113,7 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
 
               <button
                 onClick={handleShare}
-                disabled={isLoading || !!error}
+                disabled={!!qrError}
                 className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-2.5 font-medium text-sm text-white shadow-lg transition-all hover:scale-105 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl disabled:cursor-not-allowed disabled:from-gray-400 disabled:to-gray-400 disabled:hover:scale-100"
               >
                 <svg
@@ -170,160 +137,9 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
             </>
           )}
 
-          {showConfigPanel && (
-            <button
-              onClick={() => setShowConfig(!showConfig)}
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2.5 font-medium text-sm text-white shadow-lg transition-all hover:scale-105 hover:from-orange-600 hover:to-red-600 hover:shadow-xl"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-              </svg>
-              {showConfig ? 'Hide Settings' : 'Customize'}
-            </button>
-          )}
         </div>
       )}
 
-      {/* Configuration Panel */}
-      {showConfig && (
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
-          <h3 className="mb-4 font-semibold text-gray-900 text-md dark:text-white">
-            QR Code Settings
-          </h3>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Size Setting */}
-            <div>
-              <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
-                Size (pixels)
-              </label>
-              <select
-                value={currentConfig.size || 256}
-                onChange={(e) =>
-                  handleConfigChange('size', Number(e.target.value))
-                }
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              >
-                <option value={128}>Small (128px)</option>
-                <option value={256}>Medium (256px)</option>
-                <option value={512}>Large (512px)</option>
-                <option value={1024}>Extra Large (1024px)</option>
-              </select>
-            </div>
-
-            {/* Error Correction Level */}
-            <div>
-              <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
-                Error Correction
-              </label>
-              <select
-                value={currentConfig.errorCorrectionLevel || 'M'}
-                onChange={(e) =>
-                  handleConfigChange('errorCorrectionLevel', e.target.value)
-                }
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              >
-                <option value="L">Low (~7%)</option>
-                <option value="M">Medium (~15%)</option>
-                <option value="Q">Quartile (~25%)</option>
-                <option value="H">High (~30%)</option>
-              </select>
-            </div>
-
-            {/* Dark Color */}
-            <div className="w-full">
-              <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
-                Dark Color
-              </label>
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0">
-                  <input
-                    type="color"
-                    value={currentConfig.colors?.dark || '#000000'}
-                    onChange={(e) =>
-                      handleConfigChange('colors', {
-                        ...currentConfig.colors,
-                        dark: e.target.value,
-                        light: currentConfig.colors?.light || '#FFFFFF',
-                      })
-                    }
-                    className="h-12 w-16 cursor-pointer rounded-lg border-2 border-gray-300 bg-transparent dark:border-gray-600"
-                    style={{
-                      padding: '2px',
-                      appearance: 'none',
-                      WebkitAppearance: 'none',
-                    }}
-                  />
-                </div>
-                <input
-                  type="text"
-                  value={currentConfig.colors?.dark || '#000000'}
-                  onChange={(e) =>
-                    handleConfigChange('colors', {
-                      ...currentConfig.colors,
-                      dark: e.target.value,
-                      light: currentConfig.colors?.light || '#FFFFFF',
-                    })
-                  }
-                  placeholder="#000000"
-                  className="min-w-0 flex-1 rounded-lg border border-gray-300 bg-white px-3 py-3 font-mono text-gray-900 text-sm uppercase tracking-wider dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
-            </div>
-
-            {/* Light Color */}
-            <div className="w-full">
-              <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
-                Light Color
-              </label>
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0">
-                  <input
-                    type="color"
-                    value={currentConfig.colors?.light || '#FFFFFF'}
-                    onChange={(e) =>
-                      handleConfigChange('colors', {
-                        dark: currentConfig.colors?.dark || '#000000',
-                        ...currentConfig.colors,
-                        light: e.target.value,
-                      })
-                    }
-                    className="h-12 w-16 cursor-pointer rounded-lg border-2 border-gray-300 bg-transparent dark:border-gray-600"
-                    style={{
-                      padding: '2px',
-                      appearance: 'none',
-                      WebkitAppearance: 'none',
-                    }}
-                  />
-                </div>
-                <input
-                  type="text"
-                  value={currentConfig.colors?.light || '#FFFFFF'}
-                  onChange={(e) =>
-                    handleConfigChange('colors', {
-                      dark: currentConfig.colors?.dark || '#000000',
-                      ...currentConfig.colors,
-                      light: e.target.value,
-                    })
-                  }
-                  placeholder="#FFFFFF"
-                  className="min-w-0 flex-1 rounded-lg border border-gray-300 bg-white px-3 py-3 font-mono text-gray-900 text-sm uppercase tracking-wider dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

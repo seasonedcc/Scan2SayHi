@@ -45,73 +45,24 @@ export async function loader({ request }: Route.LoaderArgs) {
     return redirect('/')
   }
 
+  // Generate QR code on server side
+  const { generateQrCodeServer } = await import('../business/qr/qr.server')
+  
+  const qrResult = await generateQrCodeServer(
+    cookieValidation.userData.linkedinUrl.url,
+    cookieValidation.userData.qrConfig || {}
+  )
+
   return data({
     userData: cookieValidation.userData,
     warnings: cookieValidation.warnings,
     errors: cookieValidation.errors,
+    qrCode: qrResult.success ? qrResult.data : null,
+    qrError: qrResult.success ? null : qrResult.error,
   })
 }
 
 export async function action({ request }: Route.ActionArgs) {
-  const url = new URL(request.url)
-
-  // Handle QR generation API calls (from /qr/generate)
-  if (url.pathname === '/qr/generate') {
-    const { generateQrCodeServer } = await import('../business/qr/qr.server')
-
-    if (request.method !== 'POST') {
-      return data(
-        { success: false, error: { message: 'Method not allowed' } },
-        { status: 405 }
-      )
-    }
-
-    try {
-      const body = await request.json()
-      const { content, config } = body
-
-      if (!content || typeof content !== 'string') {
-        return data(
-          {
-            success: false,
-            error: { message: 'Content is required and must be a string' },
-          },
-          { status: 400 }
-        )
-      }
-
-      const result = await generateQrCodeServer(content, config || {})
-
-      if (!result.success) {
-        return data(
-          {
-            success: false,
-            error: result.error,
-          },
-          { status: 400 }
-        )
-      }
-
-      return data({
-        success: true,
-        data: result.data,
-        fromCache: false,
-      })
-    } catch (error) {
-      console.error('QR generation error:', error)
-      return data(
-        {
-          success: false,
-          error: {
-            message:
-              error instanceof Error ? error.message : 'Internal server error',
-            code: 'GENERATION_ERROR',
-          },
-        },
-        { status: 500 }
-      )
-    }
-  }
 
   // Handle form actions for the QR page
   const formData = await request.formData()
@@ -121,6 +72,11 @@ export async function action({ request }: Route.ActionArgs) {
     // Clear cookies and redirect to home
     const clearHeaders = createClearCookieHeaders()
     return redirect('/', { headers: clearHeaders })
+  }
+
+  if (action === 'retry_qr') {
+    // Just reload the page to retry QR generation
+    return redirect('/qr')
   }
 
   if (action === 'update_url') {
@@ -172,10 +128,14 @@ export default function QrPage({ loaderData }: Route.ComponentProps) {
     userData,
     warnings = [],
     errors = [],
+    qrCode,
+    qrError,
   } = loaderData as {
     userData: any
     warnings: string[]
     errors: string[]
+    qrCode: any
+    qrError: any
   }
 
   const handleUrlSubmit = async (url: string) => {
@@ -258,8 +218,10 @@ export default function QrPage({ loaderData }: Route.ComponentProps) {
                 }
               : undefined
           }
+          qrCode={qrCode}
+          qrError={qrError}
           showDownloadButton={true}
-          showConfigPanel={true}
+          showConfigPanel={false}
         />
 
         {/* Compact Update Form */}

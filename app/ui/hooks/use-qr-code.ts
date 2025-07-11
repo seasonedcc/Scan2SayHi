@@ -176,7 +176,7 @@ export function useQrCode(options: QrCodeOptions = {}): UseQrCodeReturn {
         }
 
         // Generate new QR code via API
-        const response = await fetch('/qr/generate', {
+        const response = await fetch('/qr', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
