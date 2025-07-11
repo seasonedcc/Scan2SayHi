@@ -20,8 +20,11 @@
 - `app/ui/components/` - Reusable UI components
 - `app/ui/primitives/` - Base UI primitives
 
-### Planned Files (To Be Created)
+### Business Logic Files
 - `app/business/linkedin/linkedin.common.ts` - Zod schemas for LinkedIn URL validation and normalization
+- `app/business/linkedin/linkedin.common.test.ts` - Comprehensive unit tests for LinkedIn URL validation
+
+### Planned Files (To Be Created)
 - `app/business/linkedin/linkedin.server.ts` - Server-side LinkedIn URL validation logic
 - `app/business/profile/profile.common.ts` - Zod schemas for profile data structures
 - `app/business/profile/profile.server.ts` - Server-side profile management logic
@@ -64,11 +67,11 @@
   - [x] 1.7 Create basic directory structure (business/, ui/hooks, ui/components, ui/primitives)
 
 - [ ] 2.0 Implement LinkedIn URL validation and normalization system
-  - [ ] 2.1 Create `app/business/linkedin/linkedin.common.ts` with Zod schemas for URL validation
-  - [ ] 2.2 Implement URL format acceptance (linkedin.com/in/username, www.linkedin.com/in/username, https://linkedin.com/in/username)
-  - [ ] 2.3 Add automatic handle prepending logic (username → https://linkedin.com/in/username)
-  - [ ] 2.4 Create validation rules for suspicious URLs (tracking parameters, short usernames, unusual formatting)
-  - [ ] 2.5 Implement URL normalization transforms using Zod
+  - [x] 2.1 Create `app/business/linkedin/linkedin.common.ts` with Zod schemas for URL validation
+  - [x] 2.2 Implement URL format acceptance (linkedin.com/in/username, www.linkedin.com/in/username, https://linkedin.com/in/username)
+  - [x] 2.3 Add automatic handle prepending logic (username → https://linkedin.com/in/username)
+  - [x] 2.4 Create validation rules for suspicious URLs (tracking parameters, short usernames, unusual formatting)
+  - [x] 2.5 Implement URL normalization transforms using Zod
   - [ ] 2.6 Create `app/business/linkedin/linkedin.server.ts` with server-side validation functions
   - [ ] 2.7 Write comprehensive unit tests for all validation scenarios
   - [ ] 2.8 Test edge cases and malformed URL handling
