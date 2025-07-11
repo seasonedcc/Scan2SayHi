@@ -468,7 +468,8 @@ describe('Cookie Common Functions', () => {
       // Create data that will actually exceed cookie size limit
       const largeUrl = `https://linkedin.com/in/${'a'.repeat(4000)}` // Very long URL
       const data = createUserDataCookie(largeUrl)
-      data.linkedinUrl!.usageCount = 99999
+      //@ts-expect-error
+      data.linkedinUrl.usageCount = 99999
 
       const result = sanitizeCookieData(data)
       expect(result.sanitized.linkedinUrl?.usageCount).toBe(999)
@@ -520,7 +521,8 @@ describe('Cookie Common Functions', () => {
         Date.now() - 40 * 24 * 60 * 60 * 1000
       ).toISOString() // 40 days ago
       const data = createUserDataCookie('https://linkedin.com/in/johndoe')
-      data.linkedinUrl!.validatedAt = oldValidation
+      //@ts-expect-error
+      data.linkedinUrl.validatedAt = oldValidation
 
       expect(shouldCleanupCookie(data)).toBe(true)
     })
@@ -588,7 +590,8 @@ describe('Cookie Common Functions', () => {
       // Create data that will actually exceed cookie size limit
       const largeUrl = `https://linkedin.com/in/${'a'.repeat(4000)}` // Very long URL
       const data = createUserDataCookie(largeUrl)
-      data.linkedinUrl!.usageCount = Number.MAX_SAFE_INTEGER
+      //@ts-expect-error
+      data.linkedinUrl.usageCount = Number.MAX_SAFE_INTEGER
 
       expect(() => JSON.stringify(data)).not.toThrow()
 

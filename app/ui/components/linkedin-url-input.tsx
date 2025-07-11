@@ -110,7 +110,7 @@ export const LinkedinUrlInput: React.FC<LinkedinUrlInputProps> = ({
 
           {isLoading && (
             <div className="-translate-y-1/2 absolute top-1/2 right-3 transform">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-purple-600" />
             </div>
           )}
         </div>
@@ -130,15 +130,15 @@ export const LinkedinUrlInput: React.FC<LinkedinUrlInputProps> = ({
       <button
         type="submit"
         disabled={disabled || isSubmitting || hasError || !url.trim()}
-        className={`w-full rounded-lg px-6 py-3 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+        className={`w-full rounded-lg px-6 py-3 font-medium text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
           isSubmitting || hasError || !url.trim()
             ? 'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
-            : 'bg-blue-600 text-white shadow-sm hover:bg-blue-700 hover:shadow-md active:bg-blue-800'
+            : 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg hover:scale-105 hover:from-violet-700 hover:to-purple-700 hover:shadow-xl active:scale-95'
         } `}
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center gap-2">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-purple-600" />
             Generating QR Code...
           </span>
         ) : (

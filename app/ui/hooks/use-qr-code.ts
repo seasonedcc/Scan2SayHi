@@ -64,15 +64,15 @@ export function useQrCode(options: QrCodeOptions = {}): UseQrCodeReturn {
       // Use TextEncoder for Unicode-safe hashing
       const encoder = new TextEncoder()
       const dataBytes = encoder.encode(data)
-      
+
       // Simple hash function for cache key
       let hash = 0
       for (let i = 0; i < dataBytes.length; i++) {
         const char = dataBytes[i] || 0
-        hash = ((hash << 5) - hash) + char
+        hash = (hash << 5) - hash + char
         hash = hash & hash // Convert to 32bit integer
       }
-      
+
       return Math.abs(hash).toString(16).substring(0, 16)
     },
     []
@@ -176,7 +176,7 @@ export function useQrCode(options: QrCodeOptions = {}): UseQrCodeReturn {
         }
 
         // Generate new QR code via API
-        const response = await fetch('/api/qr/generate', {
+        const response = await fetch('/qr/generate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -327,7 +327,7 @@ export function useQrCodeBatch(options: QrCodeOptions = {}) {
       setIsLoading(true)
 
       try {
-        const response = await fetch('/api/qr/batch', {
+        const response = await fetch('/qr/batch', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

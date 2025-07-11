@@ -12,7 +12,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-900">
                 <span className="font-bold text-sm text-white">QR</span>
               </div>
               <div>

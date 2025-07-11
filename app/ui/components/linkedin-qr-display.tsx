@@ -20,7 +20,7 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
 }) => {
   const [currentConfig, setCurrentConfig] =
     useState<Partial<QrConfig>>(qrConfig)
-  const [showConfig, setShowConfig] = useState(showConfigPanel)
+  const [showConfig, setShowConfig] = useState(false) // Always start closed
 
   const { qrCode, isLoading, error, retry, generateQrCode } = useQrCode({
     config: currentConfig,
@@ -125,18 +125,46 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
               <button
                 onClick={handleDownload}
                 disabled={isLoading || !!error}
-                className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-purple-700 px-4 py-2.5 font-medium text-sm text-white shadow-lg transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 hover:shadow-xl disabled:cursor-not-allowed disabled:from-gray-400 disabled:to-gray-400 disabled:hover:scale-100"
               >
-                <span>📥</span>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7,10 12,15 17,10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
                 Download
               </button>
 
               <button
                 onClick={handleShare}
                 disabled={isLoading || !!error}
-                className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-green-700 disabled:bg-gray-400"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-2.5 font-medium text-sm text-white shadow-lg transition-all hover:scale-105 hover:from-emerald-600 hover:to-teal-700 hover:shadow-xl disabled:cursor-not-allowed disabled:from-gray-400 disabled:to-gray-400 disabled:hover:scale-100"
               >
-                <span>📤</span>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
                 Share
               </button>
             </>
@@ -145,9 +173,21 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
           {showConfigPanel && (
             <button
               onClick={() => setShowConfig(!showConfig)}
-              className="flex items-center gap-2 rounded-lg bg-gray-600 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-gray-700"
+              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 px-4 py-2.5 font-medium text-sm text-white shadow-lg transition-all hover:scale-105 hover:from-orange-600 hover:to-red-600 hover:shadow-xl"
             >
-              <span>⚙️</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
               {showConfig ? 'Hide Settings' : 'Customize'}
             </button>
           )}
@@ -161,7 +201,7 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
             QR Code Settings
           </h3>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Size Setting */}
             <div>
               <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
@@ -201,23 +241,30 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
             </div>
 
             {/* Dark Color */}
-            <div>
+            <div className="w-full">
               <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
                 Dark Color
               </label>
-              <div className="flex gap-2">
-                <input
-                  type="color"
-                  value={currentConfig.colors?.dark || '#000000'}
-                  onChange={(e) =>
-                    handleConfigChange('colors', {
-                      ...currentConfig.colors,
-                      dark: e.target.value,
-                      light: currentConfig.colors?.light || '#FFFFFF',
-                    })
-                  }
-                  className="h-10 w-12 cursor-pointer rounded border border-gray-300 dark:border-gray-600"
-                />
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0">
+                  <input
+                    type="color"
+                    value={currentConfig.colors?.dark || '#000000'}
+                    onChange={(e) =>
+                      handleConfigChange('colors', {
+                        ...currentConfig.colors,
+                        dark: e.target.value,
+                        light: currentConfig.colors?.light || '#FFFFFF',
+                      })
+                    }
+                    className="h-12 w-16 cursor-pointer rounded-lg border-2 border-gray-300 bg-transparent dark:border-gray-600"
+                    style={{
+                      padding: '2px',
+                      appearance: 'none',
+                      WebkitAppearance: 'none',
+                    }}
+                  />
+                </div>
                 <input
                   type="text"
                   value={currentConfig.colors?.dark || '#000000'}
@@ -229,29 +276,36 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
                     })
                   }
                   placeholder="#000000"
-                  className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  className="min-w-0 flex-1 rounded-lg border border-gray-300 bg-white px-3 py-3 font-mono text-gray-900 text-sm uppercase tracking-wider dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 />
               </div>
             </div>
 
             {/* Light Color */}
-            <div>
+            <div className="w-full">
               <label className="mb-2 block font-medium text-gray-700 text-sm dark:text-gray-300">
                 Light Color
               </label>
-              <div className="flex gap-2">
-                <input
-                  type="color"
-                  value={currentConfig.colors?.light || '#FFFFFF'}
-                  onChange={(e) =>
-                    handleConfigChange('colors', {
-                      dark: currentConfig.colors?.dark || '#000000',
-                      ...currentConfig.colors,
-                      light: e.target.value,
-                    })
-                  }
-                  className="h-10 w-12 cursor-pointer rounded border border-gray-300 dark:border-gray-600"
-                />
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0">
+                  <input
+                    type="color"
+                    value={currentConfig.colors?.light || '#FFFFFF'}
+                    onChange={(e) =>
+                      handleConfigChange('colors', {
+                        dark: currentConfig.colors?.dark || '#000000',
+                        ...currentConfig.colors,
+                        light: e.target.value,
+                      })
+                    }
+                    className="h-12 w-16 cursor-pointer rounded-lg border-2 border-gray-300 bg-transparent dark:border-gray-600"
+                    style={{
+                      padding: '2px',
+                      appearance: 'none',
+                      WebkitAppearance: 'none',
+                    }}
+                  />
+                </div>
                 <input
                   type="text"
                   value={currentConfig.colors?.light || '#FFFFFF'}
@@ -263,7 +317,7 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
                     })
                   }
                   placeholder="#FFFFFF"
-                  className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  className="min-w-0 flex-1 rounded-lg border border-gray-300 bg-white px-3 py-3 font-mono text-gray-900 text-sm uppercase tracking-wider dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 />
               </div>
             </div>

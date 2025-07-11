@@ -72,68 +72,10 @@ export const LinkedinQrCardApp: React.FC<LinkedinQrCardAppProps> = ({
 
       {/* Main Content */}
       <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
-        {/* Input Section */}
-        <div className="space-y-6">
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-gray-900 text-xl dark:text-white">
-                  {showQrCode ? 'Update URL' : 'Enter LinkedIn URL'}
-                </h2>
-
-                {showQrCode && (
-                  <button
-                    onClick={handleNewUrl}
-                    className="text-blue-600 text-sm transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                  >
-                    Start Over
-                  </button>
-                )}
-              </div>
-
-              <LinkedinUrlInput
-                initialValue={currentUrl}
-                onSubmit={handleUrlSubmit}
-              />
-            </div>
-          </div>
-
-          {/* Features List */}
-          <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
-            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
-              Features
-            </h3>
-            <ul className="space-y-3 text-gray-600 text-sm dark:text-gray-400">
-              <li className="flex items-center gap-3">
-                <span className="text-green-500">✓</span>
-                <span>Instant QR code generation</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-green-500">✓</span>
-                <span>Customizable colors and sizes</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-green-500">✓</span>
-                <span>Download as high-quality PNG</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-green-500">✓</span>
-                <span>Share directly from your device</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-green-500">✓</span>
-                <span>Secure and private - no data stored</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-green-500">✓</span>
-                <span>Works offline after first load</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* QR Code Display Section */}
-        <div className="space-y-6">
+        {/* QR Code Display Section - Show first on mobile when QR exists */}
+        <div
+          className={`space-y-6 ${showQrCode ? 'order-1 lg:order-2' : 'order-2 lg:order-2'}`}
+        >
           {showQrCode ? (
             <LinkedinQrDisplay
               linkedinUrl={currentUrl}
@@ -170,6 +112,70 @@ export const LinkedinQrCardApp: React.FC<LinkedinQrCardAppProps> = ({
               </div>
             </div>
           )}
+        </div>
+
+        {/* Input Section - Show second on mobile when QR exists */}
+        <div
+          className={`space-y-6 ${showQrCode ? 'order-2 lg:order-1' : 'order-1 lg:order-1'}`}
+        >
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-semibold text-gray-900 text-xl dark:text-white">
+                  {showQrCode ? 'Update URL' : 'Enter LinkedIn URL'}
+                </h2>
+
+                {showQrCode && (
+                  <button
+                    onClick={handleNewUrl}
+                    className="text-blue-600 text-sm transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  >
+                    Start Over
+                  </button>
+                )}
+              </div>
+
+              <LinkedinUrlInput
+                initialValue={currentUrl}
+                onSubmit={handleUrlSubmit}
+              />
+            </div>
+          </div>
+
+          {/* Features List - Hide on mobile when QR code is shown to save space */}
+          <div
+            className={`rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50 ${showQrCode ? 'hidden lg:block' : 'block'}`}
+          >
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
+              Features
+            </h3>
+            <ul className="space-y-3 text-gray-600 text-sm dark:text-gray-400">
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Instant QR code generation</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Customizable colors and sizes</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Download as high-quality PNG</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Share directly from your device</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Secure and private - no data stored</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Works offline after first load</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 

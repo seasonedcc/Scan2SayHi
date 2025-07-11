@@ -6,6 +6,7 @@
  */
 
 import { validateLinkedinUrl } from '../linkedin/linkedin.common'
+import { normalizeLinkedinUrlServer } from '../linkedin/linkedin.server'
 import {
   COOKIE_NAMES,
   type CookieOptions,
@@ -220,17 +221,26 @@ export class CookieManager {
     warnings: string[]
   }> {
     try {
-      // Validate LinkedIn URL first
-      const urlValidation = validateLinkedinUrl(linkedinUrl)
-      if (!urlValidation.success) {
-        return {
-          success: false,
-          errors: urlValidation.error.issues.map((issue) => issue.message),
-          warnings: [],
-        }
-      }
+      // Try to normalize and validate LinkedIn URL (supports usernames too)
+      const urlNormalization = normalizeLinkedinUrlServer(linkedinUrl)
+      let validatedUrl: string
 
-      const validatedUrl = urlValidation.data
+      if (!urlNormalization.success) {
+        // If normalization fails, try direct validation for existing URLs
+        const urlValidation = validateLinkedinUrl(linkedinUrl)
+        if (!urlValidation.success) {
+          return {
+            success: false,
+            errors: [urlNormalization.error.message],
+            warnings: [],
+          }
+        }
+        // Use the directly validated URL
+        validatedUrl = urlValidation.data
+      } else {
+        // Use the normalized URL
+        validatedUrl = urlNormalization.data.normalizedUrl
+      }
 
       // Get existing user data
       const existingData = this.getUserData(request)

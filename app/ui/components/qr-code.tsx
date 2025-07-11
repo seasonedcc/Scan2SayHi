@@ -96,7 +96,7 @@ export function QrCode({
         {isLoading && (
           <div className="relative flex flex-col items-center gap-4">
             <div className="relative h-50 w-50 animate-pulse rounded-lg bg-[length:200%_100%] bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200">
-              <div className="absolute inset-0 animate-pulse rounded-lg border-2 border-blue-500" />
+              <div className="absolute inset-0 animate-pulse rounded-lg border-2 border-purple-500" />
             </div>
             <span className="font-medium text-gray-500 text-sm">
               Generating QR code...
@@ -124,7 +124,7 @@ export function QrCode({
             {(canRetry || showRetryButton) && (
               <button
                 onClick={handleRetry}
-                className="cursor-pointer rounded-lg border-none bg-blue-500 px-4 py-2 font-medium text-sm text-white transition-colors duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="cursor-pointer rounded-lg border-none bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-2 font-medium text-sm text-white transition-all duration-200 hover:scale-105 hover:from-purple-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                 type="button"
               >
                 Try Again
