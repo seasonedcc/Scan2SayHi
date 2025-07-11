@@ -1,0 +1,101 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!**/.react-router",
+      "!**/types.d.ts",
+      "!**/tsc",
+      "!**/build",
+      "!**/dist",
+      "!**/packages/themes/**/*.d.ts",
+      "!**/packages/themes/**/*.cjs",
+      "!**/packages/themes/**/*.js",
+      "!**/playwright-report",
+      "!**/playwright/.auth",
+      "!**/test-results",
+      "!**/blob-report"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "useAriaPropsForRole": "off",
+        "useButtonType": "off",
+        "useKeyWithClickEvents": "off",
+        "noSvgWithoutTitle": "off",
+        "noLabelWithoutControl": "off",
+        "noInteractiveElementToNoninteractiveRole": "off"
+      },
+      "complexity": {
+        "noForEach": "off",
+        "useLiteralKeys": {
+          "level": "error",
+          "fix": "safe"
+        }
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off",
+        "noUnusedImports": {
+          "level": "warn",
+          "fix": "safe"
+        },
+        "noUnusedVariables": {
+          "level": "warn",
+          "fix": "none"
+        }
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "options": {
+            "attributes": [],
+            "functions": ["cx", "twMerge"]
+          },
+          "level": "warn",
+          "fix": "safe"
+        }
+      },
+      "performance": {
+        "noAccumulatingSpread": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
+      "style": {
+        "noUnusedTemplateLiteral": {
+          "level": "error",
+          "fix": "safe"
+        },
+        "useTemplate": {
+          "level": "error",
+          "fix": "safe"
+        },
+        "useSelfClosingElements": {
+          "level": "error",
+          "fix": "safe"
+        }
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "es5"
+    }
+  }
+}
