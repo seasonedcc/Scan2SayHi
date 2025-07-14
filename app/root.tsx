@@ -38,7 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
-          content="Generate professional QR codes for your LinkedIn profile with Scan2SayHi. Perfect for business cards, networking events, and digital sharing."
+          content="Generate QR codes for your LinkedIn profile. Perfect networking events."
         />
         <meta
           name="keywords"

@@ -14,7 +14,7 @@ export function meta(_: Route.MetaArgs) {
     {
       name: 'description',
       content:
-        'Generate professional QR codes for your LinkedIn profile with Scan2SayHi. Perfect for business cards, networking events, and digital sharing. Secure, fast, and works offline.',
+        'Generate QR codes for your LinkedIn profile. Perfect networking events.',
     },
     {
       name: 'keywords',
@@ -146,78 +146,56 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               Create Your LinkedIn QR Code
             </h1>
             <p className="mx-auto max-w-2xl text-gray-600 text-lg dark:text-gray-400">
-              Generate professional QR codes for your LinkedIn profile with
-              Scan2SayHi. Perfect for business cards, networking events, and
-              digital sharing.
+              Generate QR codes for your LinkedIn profile. Perfect networking
+              events.
             </p>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
+        <div className="mx-auto max-w-2xl space-y-6">
           {/* Input Section */}
-          <div className="space-y-6">
-            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-              <div className="space-y-4">
-                <h2 className="font-semibold text-gray-900 text-xl dark:text-white">
-                  Enter LinkedIn URL
-                </h2>
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+            <div className="space-y-4">
+              <h2 className="font-semibold text-gray-900 text-xl dark:text-white">
+                Enter LinkedIn URL
+              </h2>
 
-                <LinkedinUrlInput initialValue="" onSubmit={handleUrlSubmit} />
-              </div>
-            </div>
-
-            {/* Features List */}
-            <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
-              <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
-                Features
-              </h3>
-              <ul className="space-y-3 text-gray-600 text-sm dark:text-gray-400">
-                <li className="flex items-center gap-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Instant QR code generation</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Customizable colors and sizes</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Download as high-quality PNG</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Share directly from your device</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Secure and private - no data stored</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="text-green-500">✓</span>
-                  <span>Works offline after first load</span>
-                </li>
-              </ul>
+              <LinkedinUrlInput initialValue="" onSubmit={handleUrlSubmit} />
             </div>
           </div>
 
-          {/* Placeholder */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-            <div className="space-y-4 py-12 text-center">
-              <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-700">
-                <span className="text-4xl text-gray-400 dark:text-gray-500">
-                  📱
-                </span>
-              </div>
-              <div className="space-y-2">
-                <h3 className="font-medium text-gray-900 text-lg dark:text-white">
-                  QR Code Preview
-                </h3>
-                <p className="text-gray-500 text-sm dark:text-gray-400">
-                  Enter your LinkedIn URL to generate a QR code
-                </p>
-              </div>
-            </div>
+          {/* Features List */}
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+            <h3 className="mb-4 font-semibold text-gray-900 text-lg dark:text-white">
+              Features
+            </h3>
+            <ul className="space-y-3 text-gray-600 text-sm dark:text-gray-400">
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Instant QR code generation</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Customizable colors and sizes</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Download as high-quality PNG</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Share directly from your device</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Secure and private - no data stored</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-green-500">✓</span>
+                <span>Works offline after first load</span>
+              </li>
+            </ul>
           </div>
         </div>
 
