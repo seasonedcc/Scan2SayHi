@@ -73,14 +73,12 @@ const cookieValidationResultSchema = z.object({
   shouldReset: z.boolean().default(false),
 })
 
-// Export types
-export type LinkedinUrlCookie = z.infer<typeof linkedinUrlCookieSchema>
-export type QrConfigCookie = z.infer<typeof qrConfigCookieSchema>
-export type UserPreferencesCookie = z.infer<typeof userPreferencesCookieSchema>
+// Export types (only the ones that are used)
 export type UserDataCookie = z.infer<typeof userDataCookieSchema>
-export type CookieValidationResult = z.infer<
-  typeof cookieValidationResultSchema
->
+type QrConfigCookie = z.infer<typeof qrConfigCookieSchema>
+type UserPreferencesCookie = z.infer<typeof userPreferencesCookieSchema>
+type CookieValidationResult = z.infer<typeof cookieValidationResultSchema>
+// Removed unused types: LinkedinUrlCookie
 
 // Cookie names constants
 export const COOKIE_NAMES = {

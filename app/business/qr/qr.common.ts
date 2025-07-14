@@ -107,19 +107,13 @@ const qrValidationResultSchema = z.object({
   errors: z.array(z.string()).default([]),
 })
 
-// Export types
-export type QrErrorCorrectionLevel = z.infer<
-  typeof qrErrorCorrectionLevelSchema
->
-export type QrSize = z.infer<typeof qrSizeSchema>
-export type QrMargin = z.infer<typeof qrMarginSchema>
-export type QrColor = z.infer<typeof qrColorSchema>
+// Export types (only the ones that are used)
 export type QrConfig = z.infer<typeof qrConfigSchema>
-export type QrContent = z.infer<typeof qrContentSchema>
-export type QrGenerationRequest = z.infer<typeof qrGenerationRequestSchema>
 export type QrGenerationResult = z.infer<typeof qrGenerationResultSchema>
 export type QrCacheEntry = z.infer<typeof qrCacheEntrySchema>
-export type QrValidationResult = z.infer<typeof qrValidationResultSchema>
+type QrErrorCorrectionLevel = z.infer<typeof qrErrorCorrectionLevelSchema>
+type QrValidationResult = z.infer<typeof qrValidationResultSchema>
+// Removed unused types: QrSize, QrMargin, QrColor, QrContent, QrGenerationRequest
 
 // Validation helper functions
 export const validateQrContent = (content: string) => {

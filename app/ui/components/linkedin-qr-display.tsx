@@ -4,7 +4,7 @@ import { Form } from 'react-router'
 import type { QrConfig, QrGenerationResult } from '../../business/qr/qr.common'
 import { QrCode } from './qr-code'
 
-export interface LinkedinQrDisplayProps {
+interface LinkedinQrDisplayProps {
   linkedinUrl: string
   qrConfig?: Partial<QrConfig> | undefined
   qrCode?: QrGenerationResult | null | undefined

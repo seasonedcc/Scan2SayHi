@@ -144,17 +144,11 @@ const urlNormalizationResultSchema = z.object({
 // Export schemas (only the ones that are used)
 // Removed unused schemas: linkedinUsernameSchema, linkedinRawInputSchema, linkedinFlexibleInputSchema, linkedinNormalizedUrlSchema, suspiciousUrlIndicatorsSchema, urlNormalizationResultSchema
 
-// Export types
-export type LinkedinUsername = z.infer<typeof linkedinUsernameSchema>
-export type LinkedinRawInput = z.infer<typeof linkedinRawInputSchema>
-export type LinkedinFlexibleInput = z.infer<typeof linkedinFlexibleInputSchema>
+// Export types (only the ones that are used)
 export type LinkedinNormalizedUrl = z.infer<typeof linkedinNormalizedUrlSchema>
-export type SuspiciousUrlIndicators = z.infer<
-  typeof suspiciousUrlIndicatorsSchema
->
-export type UrlNormalizationResult = z.infer<
-  typeof urlNormalizationResultSchema
->
+type SuspiciousUrlIndicators = z.infer<typeof suspiciousUrlIndicatorsSchema>
+type UrlNormalizationResult = z.infer<typeof urlNormalizationResultSchema>
+// Removed unused types: LinkedinUsername, LinkedinRawInput, LinkedinFlexibleInput
 
 // Validation helper functions
 export const validateLinkedinUsername = (username: string) => {

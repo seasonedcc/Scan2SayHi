@@ -2,7 +2,7 @@ import type React from 'react'
 import { useState } from 'react'
 import { normalizeLinkedinUrl } from '../../business/linkedin/linkedin.common'
 
-export interface LinkedinUrlInputProps {
+interface LinkedinUrlInputProps {
   initialValue?: string
   onSubmit: (url: string) => Promise<void> | void
   disabled?: boolean
