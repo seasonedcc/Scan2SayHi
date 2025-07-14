@@ -141,15 +141,8 @@ const urlNormalizationResultSchema = z.object({
   suspiciousIndicators: suspiciousUrlIndicatorsSchema,
 })
 
-// Export schemas
-export {
-  linkedinUsernameSchema,
-  linkedinRawInputSchema,
-  linkedinFlexibleInputSchema,
-  linkedinNormalizedUrlSchema,
-  suspiciousUrlIndicatorsSchema,
-  urlNormalizationResultSchema,
-}
+// Export schemas (only the ones that are used)
+// Removed unused schemas: linkedinUsernameSchema, linkedinRawInputSchema, linkedinFlexibleInputSchema, linkedinNormalizedUrlSchema, suspiciousUrlIndicatorsSchema, urlNormalizationResultSchema
 
 // Export types
 export type LinkedinUsername = z.infer<typeof linkedinUsernameSchema>
@@ -460,7 +453,7 @@ export const normalizeLinkedinUrlWithAnalysis = (input: string) => {
 
 // URL normalization constants
 export const LINKEDIN_BASE_URL = 'https://linkedin.com/in/'
-export const LINKEDIN_WWW_BASE_URL = 'https://www.linkedin.com/in/'
+// Removed unused export: LINKEDIN_WWW_BASE_URL
 
 // Common tracking parameters to detect and remove
 export const TRACKING_PARAMETERS = [

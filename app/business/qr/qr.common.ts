@@ -8,10 +8,10 @@ import { z } from 'zod'
  */
 
 // QR code error correction levels
-export const qrErrorCorrectionLevelSchema = z.enum(['L', 'M', 'Q', 'H'])
+const qrErrorCorrectionLevelSchema = z.enum(['L', 'M', 'Q', 'H'])
 
 // QR code size configuration
-export const qrSizeSchema = z
+const qrSizeSchema = z
   .number()
   .int()
   .min(64, 'QR code size must be at least 64px')
@@ -19,7 +19,7 @@ export const qrSizeSchema = z
   .default(256)
 
 // QR code margin configuration
-export const qrMarginSchema = z
+const qrMarginSchema = z
   .number()
   .int()
   .min(0, 'QR code margin must be non-negative')
@@ -27,7 +27,7 @@ export const qrMarginSchema = z
   .default(4)
 
 // QR code color configuration
-export const qrColorSchema = z.object({
+const qrColorSchema = z.object({
   dark: z
     .string()
     .regex(/^#[0-9A-Fa-f]{6}$/, 'Dark color must be a valid hex color')
@@ -39,7 +39,7 @@ export const qrColorSchema = z.object({
 })
 
 // QR code configuration schema
-export const qrConfigSchema = z.object({
+const qrConfigSchema = z.object({
   size: qrSizeSchema,
   errorCorrectionLevel: qrErrorCorrectionLevelSchema.default('M'),
   margin: qrMarginSchema,
@@ -48,7 +48,7 @@ export const qrConfigSchema = z.object({
 })
 
 // QR code content validation
-export const qrContentSchema = z
+const qrContentSchema = z
   .string()
   .min(1, 'QR code content cannot be empty')
   .max(2953, 'QR code content exceeds maximum length for reliable encoding')
@@ -69,13 +69,13 @@ export const qrContentSchema = z
   )
 
 // QR code generation request schema
-export const qrGenerationRequestSchema = z.object({
+const qrGenerationRequestSchema = z.object({
   content: qrContentSchema,
   config: qrConfigSchema.optional(),
 })
 
 // QR code generation result schema
-export const qrGenerationResultSchema = z.object({
+const qrGenerationResultSchema = z.object({
   content: qrContentSchema,
   config: qrConfigSchema,
   dataUrl: z
@@ -90,7 +90,7 @@ export const qrGenerationResultSchema = z.object({
 })
 
 // QR code cache entry schema
-export const qrCacheEntrySchema = z.object({
+const qrCacheEntrySchema = z.object({
   key: z.string().min(1, 'Cache key cannot be empty'),
   result: qrGenerationResultSchema,
   expiresAt: z.date(),
@@ -99,7 +99,7 @@ export const qrCacheEntrySchema = z.object({
 })
 
 // QR code validation result schema
-export const qrValidationResultSchema = z.object({
+const qrValidationResultSchema = z.object({
   isValid: z.boolean(),
   estimatedSize: z.number().int().positive().optional(),
   recommendedErrorLevel: qrErrorCorrectionLevelSchema.optional(),

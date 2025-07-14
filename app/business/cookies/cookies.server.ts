@@ -468,7 +468,7 @@ export class CookieManager {
 /**
  * Default cookie manager instance
  */
-export const defaultCookieManager = new CookieManager()
+const defaultCookieManager = new CookieManager()
 
 /**
  * Utility functions for cookie management

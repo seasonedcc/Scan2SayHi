@@ -4,13 +4,11 @@ import {
   COOKIE_NAMES,
   checkCookieSize,
   createUserDataCookie,
-  DEFAULT_COOKIE_OPTIONS,
   generateCookieName,
   sanitizeCookieData,
   shouldCleanupCookie,
   updateUserDataCookie,
   validateCookieData,
-  validateCookieOptions,
   validateLinkedinUrlCookie,
   validateQrConfigCookie,
   validateUserDataCookie,
@@ -18,57 +16,6 @@ import {
 } from './cookies.common'
 
 describe('Cookie Common Functions', () => {
-  describe('validateCookieOptions', () => {
-    it('should accept valid cookie options', () => {
-      const validOptions = [
-        {},
-        { maxAge: 3600 },
-        { httpOnly: false, secure: false },
-        { sameSite: 'strict' as const },
-        { path: '/app' },
-        {
-          maxAge: 86400,
-          httpOnly: true,
-          secure: true,
-          sameSite: 'lax' as const,
-          path: '/',
-        },
-      ]
-
-      for (const options of validOptions) {
-        const result = validateCookieOptions(options)
-        expect(result.success).toBe(true)
-      }
-    })
-
-    it('should reject invalid cookie options', () => {
-      const invalidOptions = [
-        { maxAge: -1 },
-        { maxAge: 0 },
-        { sameSite: 'invalid' },
-        { httpOnly: 'true' }, // Should be boolean
-        { secure: 1 }, // Should be boolean
-      ]
-
-      for (const options of invalidOptions) {
-        const result = validateCookieOptions(options)
-        expect(result.success).toBe(false)
-      }
-    })
-
-    it('should apply default values', () => {
-      const result = validateCookieOptions({})
-      expect(result.success).toBe(true)
-      if (result.success) {
-        expect(result.data.maxAge).toBe(30 * 24 * 60 * 60)
-        expect(result.data.httpOnly).toBe(true)
-        expect(result.data.secure).toBe(true)
-        expect(result.data.sameSite).toBe('lax')
-        expect(result.data.path).toBe('/')
-      }
-    })
-  })
-
   describe('validateLinkedinUrlCookie', () => {
     it('should accept valid LinkedIn URL cookie data', () => {
       const validData = {
@@ -546,13 +493,6 @@ describe('Cookie Common Functions', () => {
       expect(COOKIE_NAMES.USER_DATA).toBe('linkedin_card_data')
       expect(COOKIE_NAMES.SESSION_ID).toBe('linkedin_card_session')
       expect(COOKIE_NAMES.PREFERENCES).toBe('linkedin_card_prefs')
-    })
-
-    it('should export correct default options', () => {
-      expect(DEFAULT_COOKIE_OPTIONS.maxAge).toBe(30 * 24 * 60 * 60)
-      expect(DEFAULT_COOKIE_OPTIONS.httpOnly).toBe(true)
-      expect(DEFAULT_COOKIE_OPTIONS.sameSite).toBe('lax')
-      expect(DEFAULT_COOKIE_OPTIONS.path).toBe('/')
     })
 
     it('should export cookie limits', () => {

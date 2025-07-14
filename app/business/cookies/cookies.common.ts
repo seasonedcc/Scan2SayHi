@@ -1,26 +1,25 @@
 import { z } from 'zod'
 
-/**
- * Cookie-based data persistence for LinkedIn URLs and QR configurations
- *
- * This module provides schemas and utilities for securely storing user data
- * in HTTP cookies with proper validation and expiration.
- */
+// Cookie options type
+export type CookieOptions = {
+  maxAge?: number
+  path?: string
+  httpOnly?: boolean
+  secure?: boolean
+  sameSite?: 'strict' | 'lax' | 'none'
+}
 
-// Cookie configuration schemas
-export const cookieOptionsSchema = z.object({
-  maxAge: z
-    .number()
-    .positive()
-    .default(30 * 24 * 60 * 60), // 30 days in seconds
-  httpOnly: z.boolean().default(true),
-  secure: z.boolean().default(true),
-  sameSite: z.enum(['strict', 'lax', 'none']).default('lax'),
-  path: z.string().default('/'),
-})
+// Default cookie options
+export const DEFAULT_COOKIE_OPTIONS: CookieOptions = {
+  maxAge: 30 * 24 * 60 * 60, // 30 days
+  path: '/',
+  httpOnly: true,
+  secure: true,
+  sameSite: 'lax',
+}
 
 // LinkedIn URL cookie data schema
-export const linkedinUrlCookieSchema = z.object({
+const linkedinUrlCookieSchema = z.object({
   url: z.string().url(),
   validatedAt: z.string().datetime(),
   lastUsed: z.string().datetime(),
@@ -28,7 +27,7 @@ export const linkedinUrlCookieSchema = z.object({
 })
 
 // QR configuration cookie data schema
-export const qrConfigCookieSchema = z.object({
+const qrConfigCookieSchema = z.object({
   size: z.number().int().min(64).max(1024).default(256),
   errorCorrectionLevel: z.enum(['L', 'M', 'Q', 'H']).default('M'),
   colors: z
@@ -47,7 +46,7 @@ export const qrConfigCookieSchema = z.object({
 })
 
 // User preferences cookie data schema
-export const userPreferencesCookieSchema = z.object({
+const userPreferencesCookieSchema = z.object({
   showInstructions: z.boolean().default(true),
   enableOfflineQr: z.boolean().default(true),
   autoGenerateQr: z.boolean().default(true),
@@ -56,7 +55,7 @@ export const userPreferencesCookieSchema = z.object({
 })
 
 // Combined user data schema for main cookie
-export const userDataCookieSchema = z.object({
+const userDataCookieSchema = z.object({
   linkedinUrl: linkedinUrlCookieSchema.optional(),
   qrConfig: qrConfigCookieSchema.optional(),
   preferences: userPreferencesCookieSchema.optional(),
@@ -66,7 +65,7 @@ export const userDataCookieSchema = z.object({
 })
 
 // Cookie validation result schema
-export const cookieValidationResultSchema = z.object({
+const cookieValidationResultSchema = z.object({
   isValid: z.boolean(),
   data: userDataCookieSchema.optional(),
   errors: z.array(z.string()).default([]),
@@ -75,7 +74,6 @@ export const cookieValidationResultSchema = z.object({
 })
 
 // Export types
-export type CookieOptions = z.infer<typeof cookieOptionsSchema>
 export type LinkedinUrlCookie = z.infer<typeof linkedinUrlCookieSchema>
 export type QrConfigCookie = z.infer<typeof qrConfigCookieSchema>
 export type UserPreferencesCookie = z.infer<typeof userPreferencesCookieSchema>
@@ -91,26 +89,12 @@ export const COOKIE_NAMES = {
   PREFERENCES: 'linkedin_card_prefs',
 } as const
 
-// Default cookie options
-export const DEFAULT_COOKIE_OPTIONS: CookieOptions = {
-  maxAge: 30 * 24 * 60 * 60, // 30 days
-  httpOnly: true,
-  secure: true, // Always secure for tests and production
-  sameSite: 'lax',
-  path: '/',
-}
-
 // Cookie size limits (browsers typically limit to 4KB per cookie)
 export const COOKIE_LIMITS = {
   MAX_SIZE: 3900, // Leave some buffer
   MAX_URL_LENGTH: 2000, // Standard URL length limit
   MAX_COOKIES_PER_DOMAIN: 50,
 } as const
-
-// Validation helper functions
-export const validateCookieOptions = (options: unknown) => {
-  return cookieOptionsSchema.safeParse(options)
-}
 
 export const validateLinkedinUrlCookie = (data: unknown) => {
   return linkedinUrlCookieSchema.safeParse(data)

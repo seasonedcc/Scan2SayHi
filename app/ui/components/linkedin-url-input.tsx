@@ -158,4 +158,4 @@ export const LinkedinUrlInput: React.FC<LinkedinUrlInputProps> = ({
   )
 }
 
-export default LinkedinUrlInput
+// Removed unused default export

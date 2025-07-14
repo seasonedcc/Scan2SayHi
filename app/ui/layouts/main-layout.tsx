@@ -54,4 +54,4 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   )
 }
 
-export default MainLayout
+// Removed unused default export

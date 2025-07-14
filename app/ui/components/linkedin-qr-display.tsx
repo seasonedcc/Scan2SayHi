@@ -283,4 +283,4 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
   )
 }
 
-export default LinkedinQrDisplay
+// Removed unused default export
