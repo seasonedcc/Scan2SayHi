@@ -24,7 +24,8 @@ export function meta(_: Route.MetaArgs) {
     { property: 'og:title', content: 'Scan2SayHi - LinkedIn QR Generator' },
     {
       property: 'og:description',
-      content: 'Create professional QR codes for your LinkedIn profile with Scan2SayHi',
+      content:
+        'Create professional QR codes for your LinkedIn profile with Scan2SayHi',
     },
     { property: 'og:type', content: 'website' },
   ]
@@ -145,8 +146,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               Create Your LinkedIn QR Code
             </h1>
             <p className="mx-auto max-w-2xl text-gray-600 text-lg dark:text-gray-400">
-              Generate professional QR codes for your LinkedIn profile with Scan2SayHi. Perfect
-              for business cards, networking events, and digital sharing.
+              Generate professional QR codes for your LinkedIn profile with
+              Scan2SayHi. Perfect for business cards, networking events, and
+              digital sharing.
             </p>
           </div>
         </div>

@@ -47,23 +47,36 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   // Generate QR code on server side
   const { generateQrCodeServer } = await import('../business/qr/qr.server')
-  
-  const qrResult = await generateQrCodeServer(
-    cookieValidation.userData.linkedinUrl.url,
-    cookieValidation.userData.qrConfig || {}
-  )
 
-  return data({
-    userData: cookieValidation.userData,
-    warnings: cookieValidation.warnings,
-    errors: cookieValidation.errors,
-    qrCode: qrResult.success ? qrResult.data : null,
-    qrError: qrResult.success ? null : qrResult.error,
-  })
+  try {
+    const qrResult = await generateQrCodeServer(
+      cookieValidation.userData.linkedinUrl.url,
+      cookieValidation.userData.qrConfig || {}
+    )
+
+    return data({
+      userData: cookieValidation.userData,
+      warnings: cookieValidation.warnings,
+      errors: cookieValidation.errors,
+      qrCode: qrResult.success ? qrResult.data : null,
+      qrError: qrResult.success ? null : qrResult.error,
+    })
+  } catch (error) {
+    // Fallback if server-side QR generation fails
+    return data({
+      userData: cookieValidation.userData,
+      warnings: [
+        ...cookieValidation.warnings,
+        'QR code generation failed, will retry on client',
+      ],
+      errors: cookieValidation.errors,
+      qrCode: null,
+      qrError: `QR generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    })
+  }
 }
 
 export async function action({ request }: Route.ActionArgs) {
-
   // Handle form actions for the QR page
   const formData = await request.formData()
   const action = formData.get('_action') as string
@@ -81,9 +94,16 @@ export async function action({ request }: Route.ActionArgs) {
 
   if (action === 'update_config') {
     const size = Number(formData.get('size')) || 256
-    const errorCorrectionLevel = (formData.get('errorCorrectionLevel') as 'L' | 'M' | 'Q' | 'H') || 'M'
-    const darkColor = formData.get('darkColorText') as string || formData.get('darkColor') as string || '#000000'
-    const lightColor = formData.get('lightColorText') as string || formData.get('lightColor') as string || '#FFFFFF'
+    const errorCorrectionLevel =
+      (formData.get('errorCorrectionLevel') as 'L' | 'M' | 'Q' | 'H') || 'M'
+    const darkColor =
+      (formData.get('darkColorText') as string) ||
+      (formData.get('darkColor') as string) ||
+      '#000000'
+    const lightColor =
+      (formData.get('lightColorText') as string) ||
+      (formData.get('lightColor') as string) ||
+      '#FFFFFF'
 
     // Get current user data from cookies
     const cookieValidation = handleCookieValidation(request)
@@ -92,7 +112,9 @@ export async function action({ request }: Route.ActionArgs) {
     }
 
     // Import cookie manager functions
-    const { updateQrConfigAndGetHeaders } = await import('../business/cookies/cookies.server')
+    const { updateQrConfigAndGetHeaders } = await import(
+      '../business/cookies/cookies.server'
+    )
 
     const result = await updateQrConfigAndGetHeaders(request, {
       size,
@@ -116,7 +138,10 @@ export async function action({ request }: Route.ActionArgs) {
     }
 
     // Redirect to reload the page with new QR code
-    return redirect('/qr', result.headers ? { headers: result.headers } : undefined)
+    return redirect(
+      '/qr',
+      result.headers ? { headers: result.headers } : undefined
+    )
   }
 
   if (action === 'update_url') {

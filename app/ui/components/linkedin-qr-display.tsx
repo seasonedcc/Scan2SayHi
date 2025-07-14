@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import type React from 'react'
+import { useState } from 'react'
+import { Form } from 'react-router'
 import type { QrConfig, QrGenerationResult } from '../../business/qr/qr.common'
 import { QrCode } from './qr-code'
-import { Form } from 'react-router'
 
 export interface LinkedinQrDisplayProps {
   linkedinUrl: string
@@ -75,6 +76,8 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
             qrCode={qrCode}
             error={qrError}
             className="mx-auto"
+            linkedinUrl={linkedinUrl}
+            qrConfig={qrConfig}
           />
 
           <div className="text-gray-600 text-sm dark:text-gray-400">
@@ -170,7 +173,7 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
 
           <Form method="post" className="space-y-6">
             <input type="hidden" name="_action" value="update_config" />
-            
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Size Setting */}
               <div>
@@ -276,7 +279,6 @@ export const LinkedinQrDisplay: React.FC<LinkedinQrDisplayProps> = ({
           </Form>
         </div>
       )}
-
     </div>
   )
 }

@@ -20,16 +20,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                   Scan2SayHi
                 </h1>
                 <p className="text-gray-500 text-xs dark:text-gray-400">
-                  LinkedIn QR codes made simple
+                  In-person connections made simple
                 </p>
               </div>
-            </div>
-
-            {/* Theme toggle placeholder */}
-            <div className="flex items-center gap-3">
-              <span className="text-gray-500 text-sm dark:text-gray-400">
-                v1.0
-              </span>
             </div>
           </div>
         </div>
